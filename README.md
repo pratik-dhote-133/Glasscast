@@ -1,50 +1,155 @@
-# Welcome to your Expo app 👋
+# Glasscast 🌤️ (BrewApps Screening Assignment)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Glasscast is a modern weather app built with **React Native (Expo Router)** featuring a clean **glassmorphism UI**, real-time weather, 5-day forecast, city search, favorites, authentication, and unit switching.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Features
 
-   ```bash
-   npm install
-   ```
+## 📸 Screenshots
 
-2. Start the app
+| Login                         | Signup                         |
+| ----------------------------- | ------------------------------ |
+| ![](screenshots/01_login.png) | ![](screenshots/02_signup.png) |
 
-   ```bash
-   npx expo start
-   ```
+| Home                         | Search                         |
+| ---------------------------- | ------------------------------ |
+| ![](screenshots/03_home.png) | ![](screenshots/04_search.png) |
 
-In the output, you'll find options to open the app in a
+| Favorites                         | Settings                         |
+| --------------------------------- | -------------------------------- |
+| ![](screenshots/05_favorites.png) | ![](screenshots/06_settings.png) |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### ✅ Weather
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Live current weather (temperature, condition, high/low)
+- 5-day forecast
+- Refresh option
 
-## Get a fresh project
+### 🔍 Search
 
-When you're ready, run:
+- Search any city worldwide
+- Preview current weather instantly
+
+### ⭐ Favorites (Supabase)
+
+- Add any city to favorites
+- View favorites list
+- Favorites show:
+  - city name
+  - current temperature
+  - weather condition
+- Remove favorites
+
+### 🔐 Authentication (Supabase)
+
+- Sign up + login
+- Protected screens (tabs only accessible after login)
+- Sign out
+
+### ⚙️ Settings
+
+- Toggle between **°C / °F**
+- Unit sync across app screens
+
+---
+
+## 🧠 Tech Stack
+
+- **React Native** + **Expo**
+- **Expo Router**
+- **Supabase Auth & Database**
+- **OpenWeatherMap API**
+- **Axios**
+
+---
+
+## 📦 Project Setup
+
+### 1) Install dependencies
 
 ```bash
-npm run reset-project
+npm install
+
+2) OpenWeather API Key
+
+Create an API key from OpenWeatherMap:
+https://openweathermap.org/api
+
+Add it inside:
+
+src/constants/env.ts
+
+export const OPENWEATHER_API_KEY = "YOUR_KEY_HERE";
+
+3) Supabase Setup
+
+Create a new Supabase project:
+https://supabase.com
+
+Enable Email Authentication:
+Authentication → Providers → Email
+
+Create favorite_cities table + policies using SQL editor:
+
+create table if not exists favorite_cities (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  city_name text not null,
+  lat double precision,
+  lon double precision,
+  created_at timestamp with time zone default now()
+);
+
+create unique index if not exists unique_user_city
+on favorite_cities(user_id, city_name);
+
+alter table favorite_cities enable row level security;
+
+create policy "Users can view their favorites"
+on favorite_cities
+for select
+using (auth.uid() = user_id);
+
+create policy "Users can insert their favorites"
+on favorite_cities
+for insert
+with check (auth.uid() = user_id);
+
+create policy "Users can delete their favorites"
+on favorite_cities
+for delete
+using (auth.uid() = user_id);
+
+
+Update Supabase credentials in:
+
+src/lib/supabase.ts
+
+const SUPABASE_URL = "YOUR_PROJECT_URL";
+const SUPABASE_ANON_KEY = "YOUR_PUBLISHABLE_KEY";
+
+▶️ Run the App
+Web
+npx expo start --web
+
+Mobile
+npx expo start
+
+Scan QR with Expo Go.
+
+✅ Notes
+
+UI is inspired by modern glassmorphism patterns.
+
+Favorites are stored securely using Supabase + Row Level Security.
+
+Unit toggle (°C/°F) updates API calls and UI globally.
+
+👤 Author
+
+Pratik Dhote
+
+
+Done ✅
 ```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
