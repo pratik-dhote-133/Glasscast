@@ -138,6 +138,15 @@ npx expo start
 
 Scan QR with Expo Go.
 
+
+## 🎥 Loom Videos
+- App Walkthrough: <https://www.loom.com/share/59a812e4af1f479b8c487bac04490e0e>
+- AI Workflow Walkthrough: <https://www.loom.com/share/9722a10d1e564ecebda57399e9b9fc7b>
+
+## 🎨 Design (Figma / Stitch)
+- Design URL: <https://www.figma.com/design/yc2Wls2O9Xd8cACBIAcIVR/Glasscast-UI-Screens-%E2%80%93-Login--Home--Search--Favorites--Settings?node-id=0-1&t=vGkKobqZ6ginaAYr-1>
+
+
 ✅ Notes
 
 UI is inspired by modern glassmorphism patterns.
